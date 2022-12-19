@@ -4,7 +4,7 @@ import string
 import random
 
 # system under test (sut)
-sut = ct.CDLL("/root/ff/lib/base64/ff_base64.so")
+sut = ct.CDLL("lib/base64/ff_base64.so")
 
 sut.ff_base64_encoded_len_is_valid.argtypes = [ct.c_uint16]
 sut.ff_base64_encoded_len_is_valid.restype = ct.c_bool

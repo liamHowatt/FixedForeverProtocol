@@ -4,7 +4,7 @@ from random import Random
 from math import ceil
 
 # system under test (sut)
-sut = ct.CDLL("/root/ff/lib/CircularBuffer/ff_CircularBuffer.so")
+sut = ct.CDLL("lib/CircularBuffer/ff_CircularBuffer.so")
 
 class CbStruct(ct.Structure):
     _fields_ = [("mem_ptr", ct.POINTER(ct.c_uint8)),

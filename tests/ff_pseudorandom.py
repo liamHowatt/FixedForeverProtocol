@@ -2,7 +2,7 @@ import ctypes as ct
 from collections import defaultdict
 
 # system under test (sut)
-sut = ct.CDLL("/root/ff/lib/pseudorandom/ff_pseudorandom.so")
+sut = ct.CDLL("lib/pseudorandom/ff_pseudorandom.so")
 
 sut.ff_pseudorandom_lfsr_bit.argtypes = [ct.POINTER(ct.c_uint32)]
 sut.ff_pseudorandom_lfsr_bit.restype = ct.c_uint8

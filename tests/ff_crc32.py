@@ -3,7 +3,7 @@ import random
 from binascii import crc32
 
 # system under test (sut)
-sut = ct.CDLL("/root/ff/lib/crc32/ff_crc32.so")
+sut = ct.CDLL("lib/crc32/ff_crc32.so")
 
 sut.ff_crc32.argtypes = [ct.POINTER(ct.c_uint8), ct.c_uint32]
 sut.ff_crc32.restype = ct.c_uint32
