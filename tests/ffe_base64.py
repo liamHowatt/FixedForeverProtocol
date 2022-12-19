@@ -4,57 +4,57 @@ import string
 import random
 
 # system under test (sut)
-sut = ct.CDLL("lib/base64/ff_base64.so")
+sut = ct.CDLL("lib/base64/ffe_base64.so")
 
-sut.ff_base64_encoded_len_is_valid.argtypes = [ct.c_uint16]
-sut.ff_base64_encoded_len_is_valid.restype = ct.c_bool
+sut.ffe_base64_encoded_len_is_valid.argtypes = [ct.c_uint16]
+sut.ffe_base64_encoded_len_is_valid.restype = ct.c_bool
 
-sut.ff_base64_encoded_len.argtypes = [ct.c_uint16]
-sut.ff_base64_encoded_len.restype = ct.c_uint16
+sut.ffe_base64_encoded_len.argtypes = [ct.c_uint16]
+sut.ffe_base64_encoded_len.restype = ct.c_uint16
 
-sut.ff_base64_decoded_len.argtypes = [ct.c_uint16]
-sut.ff_base64_decoded_len.restype = ct.c_uint16
+sut.ffe_base64_decoded_len.argtypes = [ct.c_uint16]
+sut.ffe_base64_decoded_len.restype = ct.c_uint16
 
-sut.ff_base64_encoded_message_has_valid_chars.argtypes = [ct.POINTER(ct.c_uint8), ct.c_uint16]
-sut.ff_base64_encoded_message_has_valid_chars.restype = ct.c_bool
+sut.ffe_base64_encoded_message_has_valid_chars.argtypes = [ct.POINTER(ct.c_uint8), ct.c_uint16]
+sut.ffe_base64_encoded_message_has_valid_chars.restype = ct.c_bool
 
-sut.ff_base64_encode.argtypes = [ct.POINTER(ct.c_uint8), ct.POINTER(ct.c_uint8), ct.c_uint16]
-sut.ff_base64_encode.restype = None
+sut.ffe_base64_encode.argtypes = [ct.POINTER(ct.c_uint8), ct.POINTER(ct.c_uint8), ct.c_uint16]
+sut.ffe_base64_encode.restype = None
 
-sut.ff_base64_decode.argtypes = [ct.POINTER(ct.c_uint8), ct.POINTER(ct.c_uint8), ct.c_uint16]
-sut.ff_base64_decode.restype = None
+sut.ffe_base64_decode.argtypes = [ct.POINTER(ct.c_uint8), ct.POINTER(ct.c_uint8), ct.c_uint16]
+sut.ffe_base64_decode.restype = None
 
 
 # encoded length is valid
 for i in range(1000):
-    assert sut.ff_base64_encoded_len_is_valid(len(base64.b64encode(b'0' * i).rstrip(b'=')))
-assert sut.ff_base64_encoded_len_is_valid(len(b''))
-assert not sut.ff_base64_encoded_len_is_valid(len(b'a'))
-assert sut.ff_base64_encoded_len_is_valid(len(b'aa'))
-assert sut.ff_base64_encoded_len_is_valid(len(b'aaa'))
-assert sut.ff_base64_encoded_len_is_valid(len(b'aaaa'))
-assert not sut.ff_base64_encoded_len_is_valid(len(b'aaaaa'))
-assert sut.ff_base64_encoded_len_is_valid(len(b'aaaaaa'))
+    assert sut.ffe_base64_encoded_len_is_valid(len(base64.b64encode(b'0' * i).rstrip(b'=')))
+assert sut.ffe_base64_encoded_len_is_valid(len(b''))
+assert not sut.ffe_base64_encoded_len_is_valid(len(b'a'))
+assert sut.ffe_base64_encoded_len_is_valid(len(b'aa'))
+assert sut.ffe_base64_encoded_len_is_valid(len(b'aaa'))
+assert sut.ffe_base64_encoded_len_is_valid(len(b'aaaa'))
+assert not sut.ffe_base64_encoded_len_is_valid(len(b'aaaaa'))
+assert sut.ffe_base64_encoded_len_is_valid(len(b'aaaaaa'))
 
 
 # encoded len and decoded len
 for i in range(1000):
     de = b'0' * i
     en = base64.b64encode(de).rstrip(b'=')
-    assert sut.ff_base64_encoded_len(len(de)) == len(en)
-    assert sut.ff_base64_decoded_len(len(en)) == len(de)
+    assert sut.ffe_base64_encoded_len(len(de)) == len(en)
+    assert sut.ffe_base64_decoded_len(len(en)) == len(de)
 
 
 # valid encoded characters
-assert not sut.ff_base64_encoded_message_has_valid_chars((ct.c_uint8 * 1)(*b'.'), 1)
-assert not sut.ff_base64_encoded_message_has_valid_chars((ct.c_uint8 * 1)(*b'/'), 1)
-assert sut.ff_base64_encoded_message_has_valid_chars((ct.c_uint8 * 1)(*b'0'), 1)
-assert sut.ff_base64_encoded_message_has_valid_chars((ct.c_uint8 * 1)(*b'1'), 1)
+assert not sut.ffe_base64_encoded_message_has_valid_chars((ct.c_uint8 * 1)(*b'.'), 1)
+assert not sut.ffe_base64_encoded_message_has_valid_chars((ct.c_uint8 * 1)(*b'/'), 1)
+assert sut.ffe_base64_encoded_message_has_valid_chars((ct.c_uint8 * 1)(*b'0'), 1)
+assert sut.ffe_base64_encoded_message_has_valid_chars((ct.c_uint8 * 1)(*b'1'), 1)
 
-assert sut.ff_base64_encoded_message_has_valid_chars((ct.c_uint8 * 1)(*b'n'), 1)
-assert sut.ff_base64_encoded_message_has_valid_chars((ct.c_uint8 * 1)(*b'o'), 1)
-assert not sut.ff_base64_encoded_message_has_valid_chars((ct.c_uint8 * 1)(*b'p'), 1)
-assert not sut.ff_base64_encoded_message_has_valid_chars((ct.c_uint8 * 1)(*b'q'), 1)
+assert sut.ffe_base64_encoded_message_has_valid_chars((ct.c_uint8 * 1)(*b'n'), 1)
+assert sut.ffe_base64_encoded_message_has_valid_chars((ct.c_uint8 * 1)(*b'o'), 1)
+assert not sut.ffe_base64_encoded_message_has_valid_chars((ct.c_uint8 * 1)(*b'p'), 1)
+assert not sut.ffe_base64_encoded_message_has_valid_chars((ct.c_uint8 * 1)(*b'q'), 1)
 
 
 # encode
@@ -77,9 +77,9 @@ datagen = Datagen()
 
 for _ in range(1000):
     data = next(datagen)
-    dest = (ct.c_uint8 * sut.ff_base64_encoded_len(len(data)))()
+    dest = (ct.c_uint8 * sut.ffe_base64_encoded_len(len(data)))()
     src = (ct.c_uint8 * len(data))(*data)
-    sut.ff_base64_encode(dest, src, len(src))
+    sut.ffe_base64_encode(dest, src, len(src))
     assert my_encode(data) == bytes(dest)
 
 
@@ -105,9 +105,9 @@ for _ in range(1000):
     data = next(datagen)
     if len(data) % 4 == 1:
         data = data[:-1]
-    dest = (ct.c_uint8 * sut.ff_base64_decoded_len(len(data)))()
+    dest = (ct.c_uint8 * sut.ffe_base64_decoded_len(len(data)))()
     src = (ct.c_uint8 * len(data))(*data)
-    sut.ff_base64_decode(dest, src, len(src))
+    sut.ffe_base64_decode(dest, src, len(src))
     assert my_decode(data) == bytes(dest)
 
 
@@ -124,11 +124,11 @@ for string in (
     orig = (len(string) * ct.c_uint8)(*string)
 
     orig_src = (len(string) * ct.c_uint8)(*string)
-    encoded_len = sut.ff_base64_encoded_len(len(string))
+    encoded_len = sut.ffe_base64_encoded_len(len(string))
     encoded_dest = (encoded_len * ct.c_uint8)()
-    sut.ff_base64_encode(encoded_dest, orig_src, len(orig_src))
+    sut.ffe_base64_encode(encoded_dest, orig_src, len(orig_src))
 
     round_trip_dest = (len(string) * ct.c_uint8)()
-    sut.ff_base64_decode(round_trip_dest, encoded_dest, len(encoded_dest))
+    sut.ffe_base64_decode(round_trip_dest, encoded_dest, len(encoded_dest))
 
     assert orig[:] == round_trip_dest[:]

@@ -1,7 +1,7 @@
-#include "ff_crc32.h"
+#include "ffe_crc32.h"
 
 // copied directly from https://stackoverflow.com/a/48638063
-uint32_t ff_crc32(uint8_t *buf, uint32_t len){
+uint32_t ffe_crc32(uint8_t *buf, uint32_t len){
 
     uint32_t val, crc;
     uint8_t i;

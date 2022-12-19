@@ -1,6 +1,6 @@
-#include "ff_base64.h"
+#include "ffe_base64.h"
 
-uint16_t ff_base64_encoded_len(uint16_t decoded_len) {
+uint16_t ffe_base64_encoded_len(uint16_t decoded_len) {
     uint16_t whole_sections = decoded_len / 3;
     uint16_t last_bytes = decoded_len % 3;
 
@@ -15,11 +15,11 @@ uint16_t ff_base64_encoded_len(uint16_t decoded_len) {
     return (whole_sections * 4) + last_bytes_encoded;
 }
 
-bool ff_base64_encoded_len_is_valid(uint16_t encoded_len) {
+bool ffe_base64_encoded_len_is_valid(uint16_t encoded_len) {
     return encoded_len % 4 != 1;
 }
 
-uint16_t ff_base64_decoded_len(uint16_t encoded_len) {
+uint16_t ffe_base64_decoded_len(uint16_t encoded_len) {
     uint16_t whole_sections = encoded_len / 4;
     uint16_t last_bytes = encoded_len % 4;
 
@@ -34,7 +34,7 @@ uint16_t ff_base64_decoded_len(uint16_t encoded_len) {
     return (whole_sections * 3) + last_bytes_decoded;
 }
 
-bool ff_base64_encoded_message_has_valid_chars(uint8_t *src, uint16_t src_len) {
+bool ffe_base64_encoded_message_has_valid_chars(uint8_t *src, uint16_t src_len) {
     for (uint16_t i=0; i<src_len; i++) {
         if (src[i] < '0' || src[i] > 'o') {
             return false;
@@ -43,7 +43,7 @@ bool ff_base64_encoded_message_has_valid_chars(uint8_t *src, uint16_t src_len) {
     return true;
 }
 
-void ff_base64_encode(uint8_t *dest, uint8_t *src, uint16_t src_len) {
+void ffe_base64_encode(uint8_t *dest, uint8_t *src, uint16_t src_len) {
     while (src_len) {
         uint32_t frame = 0;
         uint8_t bytes_in_frame = 0;
@@ -63,7 +63,7 @@ void ff_base64_encode(uint8_t *dest, uint8_t *src, uint16_t src_len) {
     }
 }
 
-void ff_base64_decode(uint8_t *dest, uint8_t *src, uint16_t src_len) {
+void ffe_base64_decode(uint8_t *dest, uint8_t *src, uint16_t src_len) {
     while (src_len) {
         uint32_t frame = 0;
         uint8_t bytes_in_frame = 0;
