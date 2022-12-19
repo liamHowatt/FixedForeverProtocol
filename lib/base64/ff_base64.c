@@ -34,6 +34,15 @@ uint16_t ff_base64_decoded_len(uint16_t encoded_len) {
     return (whole_sections * 3) + last_bytes_decoded;
 }
 
+bool ff_base64_encoded_message_has_valid_chars(uint8_t *src, uint16_t src_len) {
+    for (uint16_t i=0; i<src_len; i++) {
+        if (src[i] < '0' || src[i] > 'o') {
+            return false;
+        }
+    }
+    return true;
+}
+
 void ff_base64_encode(uint8_t *dest, uint8_t *src, uint16_t src_len) {
     while (src_len) {
         uint32_t frame = 0;
@@ -49,7 +58,7 @@ void ff_base64_encode(uint8_t *dest, uint8_t *src, uint16_t src_len) {
         while(bytes_in_frame) {
             bytes_in_frame -= 1;
             uint8_t six_bit = (frame >> (byte_n_from_the_right-- * 6)) & 0b111111;
-            *(dest++) = six_bit + 34;
+            *(dest++) = six_bit + '0';
         }
     }
 }
@@ -60,7 +69,7 @@ void ff_base64_decode(uint8_t *dest, uint8_t *src, uint16_t src_len) {
         uint8_t bytes_in_frame = 0;
         uint8_t byte_n_from_the_right = 3;
         while(src_len && bytes_in_frame < 4) {
-            frame += ((uint32_t) ((*(src++)) - 34)) << (byte_n_from_the_right-- * 6);
+            frame += ((uint32_t) ((*(src++)) - '0')) << (byte_n_from_the_right-- * 6);
             bytes_in_frame += 1;
             src_len -= 1;
         }

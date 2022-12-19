@@ -15,6 +15,9 @@ sut.ff_base64_encoded_len.restype = ct.c_uint16
 sut.ff_base64_decoded_len.argtypes = [ct.c_uint16]
 sut.ff_base64_decoded_len.restype = ct.c_uint16
 
+sut.ff_base64_encoded_message_has_valid_chars.argtypes = [ct.POINTER(ct.c_uint8), ct.c_uint16]
+sut.ff_base64_encoded_message_has_valid_chars.restype = ct.c_bool
+
 sut.ff_base64_encode.argtypes = [ct.POINTER(ct.c_uint8), ct.POINTER(ct.c_uint8), ct.c_uint16]
 sut.ff_base64_encode.restype = None
 
@@ -42,6 +45,18 @@ for i in range(1000):
     assert sut.ff_base64_decoded_len(len(en)) == len(de)
 
 
+# valid encoded characters
+assert not sut.ff_base64_encoded_message_has_valid_chars((ct.c_uint8 * 1)(*b'.'), 1)
+assert not sut.ff_base64_encoded_message_has_valid_chars((ct.c_uint8 * 1)(*b'/'), 1)
+assert sut.ff_base64_encoded_message_has_valid_chars((ct.c_uint8 * 1)(*b'0'), 1)
+assert sut.ff_base64_encoded_message_has_valid_chars((ct.c_uint8 * 1)(*b'1'), 1)
+
+assert sut.ff_base64_encoded_message_has_valid_chars((ct.c_uint8 * 1)(*b'n'), 1)
+assert sut.ff_base64_encoded_message_has_valid_chars((ct.c_uint8 * 1)(*b'o'), 1)
+assert not sut.ff_base64_encoded_message_has_valid_chars((ct.c_uint8 * 1)(*b'p'), 1)
+assert not sut.ff_base64_encoded_message_has_valid_chars((ct.c_uint8 * 1)(*b'q'), 1)
+
+
 # encode
 b64_chars = string.ascii_uppercase + string.ascii_lowercase + string.digits + "+/"
 assert len(b64_chars) == 64
@@ -49,7 +64,7 @@ assert len(b64_chars) == 64
 def my_encode(data):
     ret = []
     for b in base64.b64encode(data).rstrip(b'='):
-        ret.append(b64_chars.index(chr(b)) + 34)
+        ret.append(b64_chars.index(chr(b)) + ord("0"))
     return bytes(ret)
 
 randint = random.Random(42).randint
@@ -72,7 +87,7 @@ for _ in range(1000):
 def my_decode(data):
     assert len(data) % 4 != 1
     to_decode = b''.join(
-        b64_chars[b - 34].encode()
+        b64_chars[b - ord("0")].encode()
         for b
         in data
     )
@@ -83,7 +98,7 @@ def my_decode(data):
 def Datagen():
     yield b''
     while True:
-        yield bytes(randint(0 + 34, 63 + 34) for _ in range(randint(1, 1000)))
+        yield bytes(randint(0 + ord("0"), 63 + ord("0")) for _ in range(randint(1, 1000)))
 datagen = Datagen()
 
 for _ in range(1000):
@@ -94,3 +109,26 @@ for _ in range(1000):
     src = (ct.c_uint8 * len(data))(*data)
     sut.ff_base64_decode(dest, src, len(src))
     assert my_decode(data) == bytes(dest)
+
+
+# round trip
+for string in (
+    b"hello how are you",
+    b"hello how are you!",
+    b"hello how are you!?",
+    b"hello how are you!? ",
+    b"hello how are you!? -",
+    b"hello how are you!? -_",
+    b"hello how are you!? -_/",
+):
+    orig = (len(string) * ct.c_uint8)(*string)
+
+    orig_src = (len(string) * ct.c_uint8)(*string)
+    encoded_len = sut.ff_base64_encoded_len(len(string))
+    encoded_dest = (encoded_len * ct.c_uint8)()
+    sut.ff_base64_encode(encoded_dest, orig_src, len(orig_src))
+
+    round_trip_dest = (len(string) * ct.c_uint8)()
+    sut.ff_base64_decode(round_trip_dest, encoded_dest, len(encoded_dest))
+
+    assert orig[:] == round_trip_dest[:]
