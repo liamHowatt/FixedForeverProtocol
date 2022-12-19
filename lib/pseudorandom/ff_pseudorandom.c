@@ -16,9 +16,7 @@ uint16_t ff_pseudorandom_randint(uint32_t *state, uint16_t lower_bound, uint16_t
     uint16_t no_more_than = upper_bound - lower_bound;
 
     uint8_t bit_width = 0;
-    uint16_t temp = no_more_than;
-    while (temp) {
-        temp >>= 1;
+    for (uint16_t temp=no_more_than; temp; temp>>=1) {
         bit_width += 1;
     }
 
