@@ -39,8 +39,7 @@ for mem_size in (0, 1, 2, 3, 4, 10, 3000, (2 ** 16) - 1):
         except IndexError:
             return 0
     def ctrl_enq(ctrl, x):
-        if len(ctrl) != ctrl.maxlen:
-            ctrl.append(x)
+        ctrl.append(x)
 
     ENQ, DEQ = 1, 2
 
