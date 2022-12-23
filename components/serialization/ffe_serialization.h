@@ -11,7 +11,7 @@
 // longest possible encoded message = 370
 // longest possible encoded message with start and end markers = 372
 
-struct ffe_serialization_Packet {
+struct ffp_serialization_Packet {
     uint8_t from;
     uint16_t ackee_bitmask;
     uint8_t ackee_sequences[16];
@@ -21,4 +21,4 @@ struct ffe_serialization_Packet {
 };
 
 // no newline plz!!!
-bool ffe_serialization_deserialize(struct ffe_serialization_Packet *dest, uint8_t *message_dest, uint8_t *raw_input, uint16_t raw_input_len);
+bool ffp_serialization_deserialize(struct ffp_serialization_Packet *dest, uint8_t *message_dest, uint8_t *raw_input, uint16_t raw_input_len);
