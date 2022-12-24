@@ -3,13 +3,13 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-// 0..4       4                    5-19                         
+// 0..4       4
 // <checksum>|<from><ackee count>|(<ackee address><sequence>)*|(<zero bits><to>|<message>)?
 // 4 bytes    4bits  4bits          4 bits         4 bits        4 bits   4 bits  bytes*
 
-// longest possible decoded message = 277
-// longest possible encoded message = 370
-// longest possible encoded message with start and end markers = 372
+// longest possible decoded message = 4 + 1 + 15 + 1 + 255 = 276
+// longest possible encoded message = 368
+// longest possible encoded message with start and end markers = 370
 
 struct ffp_serialization_Packet {
     uint8_t from;
