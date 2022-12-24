@@ -1,0 +1,16 @@
+
+     raw   API
+in    *     *
+out   *     *
+
+
+
+queue to send       User -> ffp      address, length, characters
+Raw TX              User <- ffp                       characters
+
+Raw RX              User -> ffp                       characters
+actually receive    User <- ffp      address, length, characters
+
+
+bool ready()
+bool give(uint8_t)
