@@ -7,7 +7,7 @@ struct ffp_core_interface {
     bool (*is_ready_for_raw_tx_byte_cb)(void *);
     bool (*raw_tx_byte_cb)(void *, uint8_t);
     bool (*is_ready_to_actually_receive_byte_cb)(void *);
-    bool (*actually_receive_byte_cb)(void *, uint8_t);
+    bool (*actually_receive_byte_cb)(void *, int16_t);
 };
 
 struct ffp_core {

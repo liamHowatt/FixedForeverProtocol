@@ -17,10 +17,14 @@ bool ffp_buffered_is_ready_to_actually_receive_byte_cb(struct ffp_buffered *self
     return true;
 }
 
-bool ffp_buffered_actually_receive_byte_cb(struct ffp_buffered *self, uint8_t byte) {
-    if (byte == '\n') {
+bool ffp_buffered_actually_receive_byte_cb(struct ffp_buffered *self, int16_t byte) {
+    if (byte != -1) {
+        self->actually_received_message_buffer[(self->actually_received_message_buffer_i)++] = byte;
     }
-    self->actually_received_message_buffer[(self->actually_received_message_buffer_i)++] = byte;
+    else {
+        self->interface->receive_message(self->actually_received_message_buffer, self->actually_received_message_buffer_i);
+        self->actually_received_message_buffer_i = 0;
+    }
     return true;
 }
 

@@ -15,7 +15,7 @@ struct ffp_buffered {
     uint8_t raw_tx_buffer[370];
     uint16_t raw_tx_buffer_i;
     uint8_t actually_received_message_buffer[255];
-    uint16_t actually_received_message_buffer_i;
+    uint8_t actually_received_message_buffer_i;
 };
 
 void ffp_buffered_init(
